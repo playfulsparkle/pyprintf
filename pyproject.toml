@@ -1,0 +1,48 @@
+[project]
+authors = [
+  {name = "Zsolt Oroszlány", email = "hello@playfulsparkle.com"},
+]
+description = "A lightweight, Open Source pyprintf sprintf() implementation written in Python"
+license = "BSD-3-Clause"
+name = "pyprintf"
+readme = "README.md"
+requires-python = ">=3.10"
+version = "0.0.1"
+maintainers = [
+  {name = "Zsolt Oroszlány", email = "hello@playfulsparkle.com"},
+]
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: BSD License",
+  "Natural Language :: English",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+]
+keywords = [
+  "pyprintf",
+  "sprintf",
+  "parser",
+  "python",
+  "formatting",
+]
+dependencies = [
+    "typing-extensions>=4.0.0",
+]
+
+[project.urls]
+"Bug Tracker" = "https://github.com/playfulsparkle/pyprintf/issues"
+"Change Log" = "https://github.com/playfulsparkle/pyprintf/blob/main/CHANGELOG.md"
+"Github" = "https://github.com/playfulsparkle/pyprintf"
+"Homepage" = "https://github.com/playfulsparkle/pyprintf"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[project.optional-dependencies]
+dev = ["pytest>=7.1", "flake8>=4.0"]
