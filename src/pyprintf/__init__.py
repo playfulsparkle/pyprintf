@@ -8,4 +8,4 @@ from .core import (
 )
 
 __all__ = ['sprintf', 'vsprintf', 'config', 'PyPrintfConfig']
-__version__ = '0.0.1'
+__version__ = '0.0.2'
