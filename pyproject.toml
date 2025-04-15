@@ -5,16 +5,22 @@ authors = [
 classifiers = [
   "Development Status :: 5 - Production/Stable",
   "Intended Audience :: Developers",
+  "Intended Audience :: Information Technology",
   "Natural Language :: English",
-  "Programming Language :: Python :: 3 :: Only",
-  "Programming Language :: Python :: 3.9",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
   "Programming Language :: Python :: 3.10",
-  "Programming Language :: Python :: 3.11",
+  "Programming Status :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
+  "Topic :: Software Development :: Libraries",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+  "Topic :: Text Processing :: General",
+  "Typing :: Typed",
+  "Framework :: Pytest",
 ]
 dependencies = [
-  "typing-extensions>=4.0.0",
+  "typing-extensions>=4.0.0; python_version<'3.11'",
 ]
 description = "A lightweight, Open Source pyprintf sprintf() implementation written in Python"
 keywords = [
@@ -40,8 +46,12 @@ version = "0.0.2"
 "Homepage" = "https://github.com/playfulsparkle/pyprintf"
 
 [build-system]
-requires = ["setuptools>=65.0.0", "wheel"]
 build-backend = "setuptools.build_meta"
+requires = ["setuptools>=65.0.0", "wheel"]
 
 [project.optional-dependencies]
-dev = ["pytest>=7.1", "flake8>=4.0"]
+test = [
+  "pytest>=8.3.0",
+  "pytest-cov>=4.1.0",
+  "flake8>=7.0.0",
+]

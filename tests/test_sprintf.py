@@ -1,13 +1,10 @@
 import pytest
-from pyprintf import sprintf, PyPrintfConfig
+from pyprintf import sprintf, config
 import json
 import math
 
-class TestPyPrintf:
-    @pytest.fixture
-    def config(self):
-        return PyPrintfConfig()
 
+class TestPyPrintf:
     def test_percentage_sign(self):
         assert sprintf("%%") == "%"
 
@@ -56,62 +53,65 @@ class TestPyPrintf:
         assert sprintf("%X", -255) == "FFFFFF01"
 
     def test_positional_arguments(self):
-        assert sprintf("%2$s %3$s a %1$s", "cracker", "Polly", "wants") == "Polly wants a cracker"
+        assert (
+            sprintf("%2$s %3$s a %1$s", "cracker", "Polly", "wants")
+            == "Polly wants a cracker"
+        )
 
     def test_named_arguments(self):
         assert sprintf("Hello %(who)s!", {"who": "world"}) == "Hello world!"
 
     class TestCallbackFunctions:
         def test_callback_string(self):
-            cfg = PyPrintfConfig().allow_computed_value(True)
+            cfg = config().allow_computed_value(True)
             assert cfg.sprintf("%s", lambda: "foobar") == "foobar"
 
         def test_callback_float_precision(self):
-            cfg = PyPrintfConfig().allow_computed_value(True)
+            cfg = config().allow_computed_value(True)
             assert cfg.sprintf("%.1f", lambda: 2.345) == "2.3"
 
         def test_callback_json_indentation(self):
-            cfg = PyPrintfConfig().allow_computed_value(True)
+            cfg = config().allow_computed_value(True)
             result = cfg.sprintf("%2j", lambda: {"foo": "bar"})
             expected = json.dumps({"foo": "bar"})
             assert result == expected
 
         def test_callback_shortest_notation(self):
-            cfg = PyPrintfConfig().allow_computed_value(True)
+            cfg = config().allow_computed_value(True)
             assert cfg.sprintf("%g", lambda: math.pi) == "3.141592653589793"
 
         def test_callback_octal(self):
-            cfg = PyPrintfConfig().allow_computed_value(True)
+            cfg = config().allow_computed_value(True)
             assert cfg.sprintf("%o", lambda: 8) == "10"
 
         def test_callback_unsigned_decimal(self):
-            cfg = PyPrintfConfig().allow_computed_value(True)
+            cfg = config().allow_computed_value(True)
             assert cfg.sprintf("%u", lambda: 2) == "2"
 
         def test_callback_large_unsigned(self):
-            cfg = PyPrintfConfig().allow_computed_value(True)
+            cfg = config().allow_computed_value(True)
             assert cfg.sprintf("%u", lambda: -2) == "4294967294"
 
         def test_callback_hex_lowercase(self):
-            cfg = PyPrintfConfig().allow_computed_value(True)
+            cfg = config().allow_computed_value(True)
             assert cfg.sprintf("%x", lambda: 255) == "ff"
             assert cfg.sprintf("%x", lambda: -255) == "ffffff01"
 
         def test_callback_hex_uppercase(self):
-            cfg = PyPrintfConfig().allow_computed_value(True)
+            cfg = config().allow_computed_value(True)
             assert cfg.sprintf("%X", lambda: 255) == "FF"
             assert cfg.sprintf("%X", lambda: -255) == "FFFFFF01"
 
         def test_callback_large_hex(self):
-            cfg = PyPrintfConfig().allow_computed_value(True)
+            cfg = config().allow_computed_value(True)
             assert cfg.sprintf("%X", lambda: 150460469257) == "2308249009"
 
         def test_callback_binary(self):
-            cfg = PyPrintfConfig().allow_computed_value(True)
+            cfg = config().allow_computed_value(True)
             assert cfg.sprintf("%b", lambda: 2) == "10"
 
         def test_callback_character(self):
-            cfg = PyPrintfConfig().allow_computed_value(True)
+            cfg = config().allow_computed_value(True)
             assert cfg.sprintf("%c", lambda: 65) == "A"
 
         def test_callback_type_detection(self):
@@ -122,7 +122,7 @@ class TestPyPrintf:
             assert "lambda" in result  # Python shows <lambda> in repr
 
         def test_callback_security(self):
-            cfg = PyPrintfConfig().allow_computed_value(False)
+            cfg = config().allow_computed_value(False)
             with pytest.raises(ValueError):
                 cfg.sprintf("%s", lambda: "dangerous")
 
@@ -139,14 +139,14 @@ class TestPyPrintf:
             assert sprintf("%T", True) == "bool"
             assert sprintf("%T", 42) == "int"
             assert sprintf("%T", "string") == "str"
-            assert sprintf("%T", [1,2,3]) == "list"
+            assert sprintf("%T", [1, 2, 3]) == "list"
             assert sprintf("%T", {"key": "value"}) == "dict"
 
     class TestValueFormatting:
         def test_value_formatting(self):
             assert sprintf("%v", True) == "True"
             assert sprintf("%v", 42) == "42"
-            assert sprintf("%v", [1,2,3]) == "[1, 2, 3]"
+            assert sprintf("%v", [1, 2, 3]) == "[1, 2, 3]"
 
     class TestComplexFormatting:
         def test_sign_handling(self):
@@ -165,19 +165,22 @@ class TestPyPrintf:
 
     class TestConfiguration:
         def test_preserve_unmatched(self):
-            cfg = PyPrintfConfig().preserve_unmatched_placeholder(True)
-            assert cfg.sprintf('%(name)s number 1') == "%(name)s number 1"
+            cfg = config().preserve_unmatched_placeholder(True)
+            assert cfg.sprintf("%(name)s number 1") == "%(name)s number 1"
 
         def test_stats_tracking(self):
-            cfg = PyPrintfConfig()
+            cfg = config()
             cfg.sprintf("%s %s %s %s %(name)s %1$s %2$s")
             stats = cfg.get_stats()
-            assert stats['total_placeholders'] == 7
-            assert stats['total_named_placeholder'] == 1
+            assert stats["total_placeholders"] == 7
+            assert stats["total_named_placeholder"] == 1
 
     class TestEdgeCases:
         def test_large_numbers(self):
-            assert sprintf("%d", 9999999999999999999999999999999999999999) == "9999999999999999999999999999999999999999"
+            assert (
+                sprintf("%d", 9999999999999999999999999999999999999999)
+                == "9999999999999999999999999999999999999999"
+            )
 
         def test_precision_handling(self):
             assert sprintf("%.f", 2) == "2"
@@ -185,14 +188,15 @@ class TestPyPrintf:
 
     class TestErrorHandling:
         def test_missing_arguments(self):
-            cfg = PyPrintfConfig().throw_error_on_unmatched(True)
+            cfg = config().throw_error_on_unmatched(True)
             with pytest.raises(ValueError):  # Now matches implementation
                 cfg.sprintf("%s %s", "single")
 
         def test_invalid_format(self):
-            cfg = PyPrintfConfig().throw_error_on_unmatched(True)
+            cfg = config().throw_error_on_unmatched(True)
             with pytest.raises(ValueError):
                 cfg.sprintf("%invalid")
+
 
 if __name__ == "__main__":
     pytest.main()
