@@ -482,6 +482,8 @@ def sprintf_format(
 
         # Validate numeric arguments for numeric placeholders
         if RE["numeric_arg"].search(placeholder.type):
+            if isinstance(arg, list):
+                arg = arg[0]
             if arg is not None and not (
                 isinstance(arg, (int, float)) or isinstance(arg, str) and arg.isdigit()
             ):
