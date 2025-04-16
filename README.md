@@ -46,7 +46,7 @@ pip install pyprintf
 The primary formatting function that mimics C-style `sprintf` behavior with Python enhancements.
 
 **Parameters:**
-- `format_str` (str): Format string containing text and placeholders
+- `format` (str): Format string containing text and placeholders
 - `*args` (Any): Variable arguments to format (positional or keyword)
 
 **Returns:**
@@ -54,7 +54,7 @@ The primary formatting function that mimics C-style `sprintf` behavior with Pyth
 
 **Signature:**
 ```python
-def sprintf(format_str: str, *args: Any) -> str
+def sprintf(format: str, *args: Any) -> str:
 ```
 
 **Example:**
@@ -76,8 +76,8 @@ Array-accepting variant of `sprintf` for pre-collected arguments.
 
 ***Parameters:***
 
-* `format_str` (str): Format string with placeholders
-* `argv` (Iterable[Any]): Collection of arguments to format
+- `format` (str): Format string containing text and placeholders
+- `*args` (Any): Variable arguments to format (positional or keyword)
 
 ***Return Value:***
 
@@ -85,7 +85,7 @@ Array-accepting variant of `sprintf` for pre-collected arguments.
 
 **Signature:**
 ```python
-def vsprintf(format_str: str, argv: Iterable[Any]) -> str
+def vsprintf(format: str, *args: Any) -> str:
 ```
 
 ### Difference between `sprintf` and `vsprintf`
