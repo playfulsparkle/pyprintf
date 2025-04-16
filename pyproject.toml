@@ -36,7 +36,7 @@ maintainers = [
 name = "pyprintf"
 readme = "README.md"
 requires-python = ">=3.10"
-version = "0.0.3"
+version = "0.0.4"
 
 [project.urls]
 "Bug Tracker" = "https://github.com/playfulsparkle/pyprintf/issues"
