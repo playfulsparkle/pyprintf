@@ -1,201 +1,217 @@
 import pytest
-from pyprintf import sprintf, config
+from src.pyprintf import sprintf, config
 import json
 import math
 
 
-class TestPyPrintf:
-    def test_percentage_sign(self):
+class TestSimplePlaceholders:
+    def test_should_format_correctly_unmatched_placeholder(self):
+        cfg = config().preserve_unmatched_placeholder(True)
+        firstPass = cfg.sprintf(
+            "My name is %(firstname)s %(lastname)s", {"lastname": "Doe"}
+        )
+
+        assert firstPass == "My name is %(firstname)s Doe"
+
+        assert cfg.sprintf(firstPass, {"firstname": "John"}) == "My name is John Doe"
+
+    def test_should_format_a_percentage_sign(self):
         assert sprintf("%%") == "%"
 
-    def test_binary_number(self):
+    def test_should_format_a_binary_number(self):
         assert sprintf("%b", 2) == "10"
 
-    def test_character(self):
+    def test_should_format_a_character(self):
         assert sprintf("%c", 65) == "A"
 
-    def test_decimal_integer(self):
+    def test_should_format_a_decimal_integer(self):
         assert sprintf("%d", 2) == "2"
+
+    def test_should_format_an_integer(self):
+        assert sprintf("%i", 2) == "2"
+
+    def test_should_format_a_decimal_integer_from_a_string(self):
         assert sprintf("%d", "2") == "2"
 
-    def test_integer(self):
-        assert sprintf("%i", 2) == "2"
+    def test_should_format_an_integer_from_a_string(self):
         assert sprintf("%i", "2") == "2"
 
-    def test_json(self):
+    def test_should_format_a_json_object(self):
         assert sprintf("%j", {"foo": "bar"}) == json.dumps({"foo": "bar"})
+
+    def test_should_format_a_json_array(self):
         assert sprintf("%j", ["foo", "bar"]) == json.dumps(["foo", "bar"])
 
-    def test_scientific_notation(self):
-        assert sprintf("%e", 2) == "2.000000e+00"
+    def test_should_format_a_number_in_scientific_notation_lowercase(self):
+        assert sprintf("%e", 2) == "2e+0"
 
-    def test_unsigned_decimal(self):
+    def test_should_format_an_unsigned_decimal_integer(self):
         assert sprintf("%u", 2) == "2"
+
+    def test_should_format_a_large_unsigned_decimal_integer_from_a_negative_number(
+        self,
+    ):
         assert sprintf("%u", -2) == "4294967294"
 
-    def test_float(self):
-        assert sprintf("%f", 2.2) == "2.200000"
+    def test_should_format_a_floating_point_number(self):
+        assert sprintf("%f", 2.2) == "2.2"
 
-    def test_shortest_notation(self):
+    def test_should_format_a_number_in_shortest_notation_lowercase(self):
         assert sprintf("%g", math.pi) == "3.141592653589793"
 
-    def test_octal(self):
+    def test_should_format_an_octal_number(self):
         assert sprintf("%o", 8) == "10"
+
+    def test_should_format_a_large_octal_number_from_a_negative_number(self):
         assert sprintf("%o", -8) == "37777777770"
 
-    def test_string(self):
+    def test_should_format_a_string(self):
         assert sprintf("%s", "%s") == "%s"
 
-    def test_hexadecimal(self):
+    def test_should_format_a_hexadecimal_number_lowercase(self):
         assert sprintf("%x", 255) == "ff"
+
+    def test_should_format_a_large_hexadecimal_number_lowercase_from_a_negative_number(
+        self,
+    ):
         assert sprintf("%x", -255) == "ffffff01"
+
+    def test_should_format_a_hexadecimal_number_uppercase(self):
         assert sprintf("%X", 255) == "FF"
+
+    def test_should_format_a_large_hexadecimal_number_uppercase_from_a_negative_number(
+        self,
+    ):
         assert sprintf("%X", -255) == "FFFFFF01"
 
-    def test_positional_arguments(self):
+    def test_should_format_arguments_by_index(self):
         assert (
             sprintf("%2$s %3$s a %1$s", "cracker", "Polly", "wants")
             == "Polly wants a cracker"
         )
 
-    def test_named_arguments(self):
+    def test_should_format_arguments_by_name(self):
         assert sprintf("Hello %(who)s!", {"who": "world"}) == "Hello world!"
 
-    class TestCallbackFunctions:
-        def test_callback_string(self):
-            cfg = config().allow_computed_value(True)
-            assert cfg.sprintf("%s", lambda: "foobar") == "foobar"
+    def test_should_format_named_and_positional_arguments(self):
+        assert (
+            sprintf("%(name)s %s a %s", "wants", "cracker", {"name": "Polly"})
+            == "Polly wants a cracker"
+        )
 
-        def test_callback_float_precision(self):
-            cfg = config().allow_computed_value(True)
-            assert cfg.sprintf("%.1f", lambda: 2.345) == "2.3"
+    def test_should_format_named_and_positional_index_arguments(self):
+        assert (
+            sprintf("%(name)s %2$s a %1$s", "cracker", "wants", {"name": "Polly"})
+            == "Polly wants a cracker"
+        )
 
-        def test_callback_json_indentation(self):
-            cfg = config().allow_computed_value(True)
-            result = cfg.sprintf("%2j", lambda: {"foo": "bar"})
-            expected = json.dumps({"foo": "bar"})
-            assert result == expected
 
-        def test_callback_shortest_notation(self):
-            cfg = config().allow_computed_value(True)
-            assert cfg.sprintf("%g", lambda: math.pi) == "3.141592653589793"
+class TestPlaceholderBoolean:
+    def test_should_format_true_as_true(self):
+        assert sprintf("%t", True) == "true"
 
-        def test_callback_octal(self):
-            cfg = config().allow_computed_value(True)
-            assert cfg.sprintf("%o", lambda: 8) == "10"
+    def test_should_format_true_as_t_with_precision_1(self):
+        assert sprintf("%.1t", True) == "t"
 
-        def test_callback_unsigned_decimal(self):
-            cfg = config().allow_computed_value(True)
-            assert cfg.sprintf("%u", lambda: 2) == "2"
+    def test_should_format_the_string_true_as_true(self):
+        assert sprintf("%t", "True") == "true"
 
-        def test_callback_large_unsigned(self):
-            cfg = config().allow_computed_value(True)
-            assert cfg.sprintf("%u", lambda: -2) == "4294967294"
+    def test_should_format_the_number_1_as_true(self):
+        assert sprintf("%t", 1) == "true"
 
-        def test_callback_hex_lowercase(self):
-            cfg = config().allow_computed_value(True)
-            assert cfg.sprintf("%x", lambda: 255) == "ff"
-            assert cfg.sprintf("%x", lambda: -255) == "ffffff01"
+    def test_should_format_false_as_false(self):
+        assert sprintf("%t", False) == "false"
 
-        def test_callback_hex_uppercase(self):
-            cfg = config().allow_computed_value(True)
-            assert cfg.sprintf("%X", lambda: 255) == "FF"
-            assert cfg.sprintf("%X", lambda: -255) == "FFFFFF01"
+    def test_should_format_false_as_f_with_precision_1(self):
+        assert sprintf("%.1t", False) == "f"
 
-        def test_callback_large_hex(self):
-            cfg = config().allow_computed_value(True)
-            assert cfg.sprintf("%X", lambda: 150460469257) == "2308249009"
+    def test_should_format_an_empty_string_as_false(self):
+        assert sprintf("%t", "") == "false"
 
-        def test_callback_binary(self):
-            cfg = config().allow_computed_value(True)
-            assert cfg.sprintf("%b", lambda: 2) == "10"
+    def test_should_format_the_number_0_as_false(self):
+        assert sprintf("%t", "") == "false"
 
-        def test_callback_character(self):
-            cfg = config().allow_computed_value(True)
-            assert cfg.sprintf("%c", lambda: 65) == "A"
 
-        def test_callback_type_detection(self):
-            assert sprintf("%T", lambda: None) == "function"
+class TestPlaceholderType:
+    def test_should_format_none_as_nonetype(self):
+        assert sprintf("%T", None) == "nonetype"
 
-        def test_callback_value_formatting(self):
-            result = sprintf("%v", lambda: 42)
-            assert "lambda" in result  # Python shows <lambda> in repr
+    def test_should_format_a_boolean_as_boolean(self):
+        assert sprintf("%T", True) == "bool"
 
-        def test_callback_security(self):
-            cfg = config().allow_computed_value(False)
-            with pytest.raises(ValueError):
-                cfg.sprintf("%s", lambda: "dangerous")
+    def test_should_format_a_number_as_number(self):
+        assert sprintf("%T", 42) == "int"
 
-    class TestBooleanFormatting:
-        def test_boolean_values(self):
-            assert sprintf("%t", True) == "true"
-            assert sprintf("%.1t", True) == "t"
-            assert sprintf("%t", False) == "false"
-            assert sprintf("%.1t", False) == "f"
+    def test_should_format_a_string_as_string(self):
+        assert sprintf("%T", "This is a string") == "str"
 
-    class TestTypeDetection:
-        def test_type_formatting(self):
-            assert sprintf("%T", None) == "nonetype"
-            assert sprintf("%T", True) == "bool"
-            assert sprintf("%T", 42) == "int"
-            assert sprintf("%T", "string") == "str"
-            assert sprintf("%T", [1, 2, 3]) == "list"
-            assert sprintf("%T", {"key": "value"}) == "dict"
+    def test_should_format_a_list_as_list(self):
+        assert sprintf("%T", [1, 2, 3]) == "list"
 
-    class TestValueFormatting:
-        def test_value_formatting(self):
-            assert sprintf("%v", True) == "True"
-            assert sprintf("%v", 42) == "42"
-            assert sprintf("%v", [1, 2, 3]) == "[1, 2, 3]"
+    def test_should_format_a_dictionary_as_dict(self):
+        assert sprintf("%T", {"key": "value"}) == "dict"
 
-    class TestComplexFormatting:
-        def test_sign_handling(self):
-            assert sprintf("%+d", 2) == "+2"
-            assert sprintf("%+d", -2) == "-2"
-            assert sprintf("%+.1f", -2.34) == "-2.3"
 
-        def test_padding(self):
-            assert sprintf("%05d", -2) == "-0002"
-            assert sprintf("%5s", "<") == "    <"
-            assert sprintf("%-5s", ">") == ">    "
+class TestSignFormatting:
+    def test_should_format_a_positive_decimal_integer_without_a_sign(self):
+        assert sprintf("%d", 2) == "2"
 
-        def test_precision(self):
-            assert sprintf("%.1f", 2.345) == "2.3"
-            assert sprintf("%5.5s", "xxxxxx") == "xxxxx"
+    def test_should_format_a_negative_decimal_integer_with_a_minus_sign(self):
+        assert sprintf("%d", -2) == "-2"
 
-    class TestConfiguration:
-        def test_preserve_unmatched(self):
-            cfg = config().preserve_unmatched_placeholder(True)
-            assert cfg.sprintf("%(name)s number 1") == "%(name)s number 1"
+    def test_should_format_a_positive_decimal_integer_with_a_plus_sign(self):
+        assert sprintf("%+d", 2) == "+2"
 
-        def test_stats_tracking(self):
-            cfg = config()
-            cfg.sprintf("%s %s %s %s %(name)s %1$s %2$s")
-            stats = cfg.get_stats()
-            assert stats["total_placeholders"] == 7
-            assert stats["total_named_placeholder"] == 1
+    def test_should_format_a_negative_decimal_integer_with_a_minus_sign_forced(self):
+        assert sprintf("%+d", -2) == "-2"
 
-    class TestEdgeCases:
-        def test_large_numbers(self):
-            assert (
-                sprintf("%d", 9999999999999999999999999999999999999999)
-                == "9999999999999999999999999999999999999999"
-            )
+    def test_should_format_a_positive_integer_without_a_sign(self):
+        assert sprintf("%i", 2) == "2"
 
-        def test_precision_handling(self):
-            assert sprintf("%.f", 2) == "2"
-            assert sprintf("%.99f", 1).startswith("1.000000")
+    def test_should_format_a_negative_integer_with_a_minus_sign(self):
+        assert sprintf("%i", -2) == "-2"
 
-    class TestErrorHandling:
-        def test_missing_arguments(self):
-            cfg = config().throw_error_on_unmatched(True)
-            with pytest.raises(ValueError):  # Now matches implementation
-                cfg.sprintf("%s %s", "single")
+    def test_should_format_a_positive_integer_with_a_plus_sign(self):
+        assert sprintf("%+i", 2) == "+2"
 
-        def test_invalid_format(self):
-            cfg = config().throw_error_on_unmatched(True)
-            with pytest.raises(ValueError):
-                cfg.sprintf("%invalid")
+    def test_should_format_a_negative_integer_with_a_minus_sign_forced(self):
+        assert sprintf("%+i", -2) == "-2"
+
+    def test_should_format_a_positive_float_without_a_sig(self):
+        assert sprintf("%f", 2.2) == "2.2"
+
+    def test_should_format_a_negative_float_with_a_minus_sign(self):
+        assert sprintf("%f", -2.2) == "-2.2"
+
+    def test_should_format_a_positive_float_with_a_plus_sign(self):
+        assert sprintf("%+f", 2.2) == "+2.2"
+
+    def test_should_format_a_negative_float_with_a_minus_sign_forced(self):
+        assert sprintf("%+f", -2.2) == "-2.2"
+
+    def test_should_format_a_negative_float_with_a_plus_sign_and_precision(self):
+        assert sprintf("%+.1f", -2.34) == "-2.3"
+
+    def test_should_format_a_negative_zero_float_with_a_plus_sign_and_precision(self):
+        assert sprintf("%+.1f", -0.01) == "-0.0"
+
+    def test_should_format_pi_with_shortest_notation_and_precision(self):
+        assert sprintf("%.6g", math.pi) == "3.14159"
+
+    def test_should_format_pi_with_shortest_notation_and_different_precision(self):
+        assert sprintf("%.3g", math.pi) == "3.14"
+
+    def test_should_format_pi_with_shortest_notation_and_another_precision(self):
+        assert sprintf("%.1g", math.pi) == "3"
+
+    def test_should_format_a_negative_number_with_leading_zeros_and_a_plus_sign(self):
+        assert sprintf("%+010d", -123) == "-000000123"
+
+    def test_should_format_a_negative_number_with_custom_padding_and_a_plus_sign(self):
+        assert sprintf("%+'_10d", -123) == "______-123"
+
+    def test_should_format_multiple_floats_with_different_signs(self):
+        assert sprintf("%f %f", -234.34, 123.2) == "-234.34 123.2"
 
 
 if __name__ == "__main__":

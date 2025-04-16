@@ -21,8 +21,6 @@ except ImportError:
 RE = {
     # Matches if type is NOT 'T' (type detection)
     "not_type": re.compile(r"[^T]"),
-    # Matches if type is NOT 'v' (primitive value)
-    "not_primitive": re.compile(r"[^v]"),
     # Matches numeric format specifiers
     "number": re.compile(r"[diefg]"),
     # Matches numeric argument types requiring number validation
@@ -50,7 +48,7 @@ RE = {
             \.            # Dot separator
             (\d*)         # Precision
         )?
-        ([b-gijostTuvxX]) # Conversion type specifier
+        ([b-gijostTuxX]) # Conversion type specifier
         """,
         re.VERBOSE,
     ),
@@ -486,7 +484,6 @@ def sprintf_format(
         # Handle function arguments for non-type/non-primitive specifiers
         is_function_arg = (
             RE["not_type"].search(placeholder.type)
-            and RE["not_primitive"].search(placeholder.type)
             and callable(arg)
         )
 
@@ -626,12 +623,6 @@ def sprintf_format(
                 arg = str(int(arg) & MAX_UINT32)
             except (ValueError, TypeError):
                 arg = "0"
-
-        elif placeholder.type == "v":  # Primitive value
-            arg = str(arg) if arg is not None else "None"
-
-            if placeholder.precision:
-                arg = arg[: int(placeholder.precision)]
 
         elif placeholder.type in ("x", "X"):
             try:
