@@ -103,12 +103,12 @@ These elements can appear in a placeholder in a specific order between the `%` a
 1.  **Argument Index (Positional Specifier)**:
     * **Syntax:** A number (starting from 1) followed by a `$` (e.g., `%2$s`).
     * **Description:** Explicitly selects which argument to use for the current placeholder. If omitted, arguments are used sequentially in the order they are provided to `sprintf`.
-    * **Example:** `sprintf('%2$s, %1$s!', 'Hello', 'World')` will output `"World, Hello!"`.
+    * **Example:** `sprintf("%2$s, %1$s!", "Hello", "World")` will output `"World, Hello!"`.
 
 2.  **Sign Indicator**:
     * **Syntax:** A `+` character (e.g., `%+d`).
     * **Description:** Forces numeric values (integers and floats) to always display a sign, either `+` for positive numbers or `-` for negative numbers. By default, only negative numbers show a sign.
-    * **Example:** `sprintf('%+d', 5)` will output `"+5"`, and `sprintf('%+d', -5)` will output `"-5"`.
+    * **Example:** `sprintf("%+d", 5)` will output `"+5"`, and `sprintf("%+d", -5)` will output `"-5"`.
 
 3.  **Padding Specifier**:
     * **Syntax:** Either a `0` or a single quote `'` followed by any character (e.g., `%05d`, `%'*5s`).
@@ -116,20 +116,20 @@ These elements can appear in a placeholder in a specific order between the `%` a
         * Using `0` pads with leading zeros for numeric types.
         * Using `'` followed by a character pads with that specific character.
     * **Examples:**
-        * `sprintf('%05d', 12)` will output `"00012"`.
-        * `sprintf("%'*5s", 'abc')` will output `"**abc"`.
+        * `sprintf("%05d", 12)` will output `"00012"`.
+        * `sprintf("%'*5s", "abc")` will output `"**abc"`.
 
 4.  **Alignment**:
     * **Syntax:** A `-` character (e.g., `%-10s`).
     * **Description:** Aligns the output to the left within the specified field width. If the `-` is omitted, the output is right-aligned by default.
-    * **Example:** `sprintf('%-10s', 'hello')` will output `"hello     "`, and `sprintf('%10s', 'hello')` will output `"     hello"`.
+    * **Example:** `sprintf("%-10s", "hello")` will output `"hello     "`, and `sprintf("%10s", "hello")` will output `"     hello"`.
 
 5.  **Width**:
     * **Syntax:** A positive integer (e.g., `%10s`, `%5j`).
     * **Description:** Specifies the minimum number of characters to output. If the value to be formatted is shorter than the width, it will be padded (using the padding character and alignment). For the `j` (JSON) type, this number defines the indentation level (number of spaces).
     * **Examples:**
-        * `sprintf('%10s', 'test')` will output `"      test"`.
-        * `sprintf('%5j', { a: 1 })` will output `"{\n     "a": 1\n}"`.
+        * `sprintf("%10s", "test")` will output `"      test"`.
+        * `sprintf("%5j", { a: 1 })` will output `"{\n     "a": 1\n}"`.
 
 6.  **Precision**:
     * **Syntax:** A period `.` followed by a non-negative integer (e.g., `%.2f`, `%.5g`, `%.10s`).
@@ -138,9 +138,9 @@ These elements can appear in a placeholder in a specific order between the `%` a
         * For the `g` type: Specifies the number of significant digits.
         * For the `s`, `t`, `T`, and `v` types: Specifies the maximum number of characters to output (truncates the string if it's longer).
     * **Examples:**
-        * `sprintf('%.2f', 3.14159)` will output `"3.14"`.
-        * `sprintf('%.5g', 123.45678)` will output `"123.46"`.
-        * `sprintf('%.5s', 'This is a long string')` will output `"This "`.
+        * `sprintf("%.2f", 3.14159)` will output `"3.14"`.
+        * `sprintf("%.5g", 123.45678)` will output `"123.46"`.
+        * `sprintf("%.5s", "This is a long string")` will output `"This "`.
 
 ### Required Type Specifier
 
@@ -148,22 +148,22 @@ This single character at the end of the placeholder determines how the correspon
 
 | Specifier | Description                                           | Python Example                            | Output               |
 | --------- | ----------------------------------------------------- | ----------------------------------------- | -------------------- |
-| `%%`      | Outputs a literal percent sign                        | `sprintf('%%')`                           | `%`                  |
-| `%b`      | Integer in binary format                              | `sprintf('%b', 10)`                       | `1010`               |
-| `%c`      | Integer as Unicode character                          | `sprintf('%c', 65)`                       | `A`                  |
-| `%d`/`%i` | Signed decimal integer                                | `sprintf('%d', 123)`                      | `123`                |
-| `%e`      | Floating point in scientific notation (lowercase 'e') | `sprintf('%e', 123.45)`                   | `1.234500e+02`       |
-| `%u`      | Unsigned decimal integer (32-bit wrap)                | `sprintf('%u', -5)`                       | `4294967291`         |
-| `%f`      | Floating point with decimal precision                 | `sprintf('%.2f', 3.14159)`                | `3.14`               |
-| `%g`      | Adaptive float formatting                             | `sprintf('%.3g', 1234.56)`                | `1.23e+03`           |
-| `%o`      | Integer in octal format                               | `sprintf('%o', 10)`                       | `12`                 |
-| `%s`      | String output                                         | `sprintf('%s', 'hello')`                  | `hello`              |
-| `%t`      | Boolean (`"true"`/`"false"` lowercase strings)        | `sprintf('%t', True)`                     | `true`               |
-| `%T`      | Python type name                                      | `sprintf('%T', [])`                       | `list`               |
-| `%v`      | Primitive value representation                        | `sprintf('%v', 5)`                        | `5`                  |
-| `%x`      | Integer in lowercase hexadecimal                      | `sprintf('%x', 255)`                      | `ff`                 |
-| `%X`      | Integer in uppercase hexadecimal                      | `sprintf('%X', 255)`                      | `FF`                 |
-| `%j`      | Python object in JSON format                          | `sprintf('%j', {'a': 1})`                 | `{"a": 1}`           |
+| `%%`      | Outputs a literal percent sign                        | `sprintf("%%")`                           | `%`                  |
+| `%b`      | Integer in binary format                              | `sprintf("%b", 10)`                       | `1010`               |
+| `%c`      | Integer as Unicode character                          | `sprintf("%c", 65)`                       | `A`                  |
+| `%d`/`%i` | Signed decimal integer                                | `sprintf("%d", 123)`                      | `123`                |
+| `%e`      | Floating point in scientific notation (lowercase "e") | `sprintf("%e", 123.45)`                   | `1.234500e+02`       |
+| `%u`      | Unsigned decimal integer (32-bit wrap)                | `sprintf("%u", -5)`                       | `4294967291`         |
+| `%f`      | Floating point with decimal precision                 | `sprintf("%.2f", 3.14159)`                | `3.14`               |
+| `%g`      | Adaptive float formatting                             | `sprintf("%.3g", 1234.56)`                | `1.23e+03`           |
+| `%o`      | Integer in octal format                               | `sprintf("%o", 10)`                       | `12`                 |
+| `%s`      | String output                                         | `sprintf("%s", "hello")`                  | `hello`              |
+| `%t`      | Boolean (`"true"`/`"false"` lowercase strings)        | `sprintf("%t", True)`                     | `true`               |
+| `%T`      | Python type name                                      | `sprintf("%T", [])`                       | `list`               |
+| `%v`      | Primitive value representation                        | `sprintf("%v", 5)`                        | `5`                  |
+| `%x`      | Integer in lowercase hexadecimal                      | `sprintf("%x", 255)`                      | `ff`                 |
+| `%X`      | Integer in uppercase hexadecimal                      | `sprintf("%X", 255)`                      | `FF`                 |
+| `%j`      | Python object in JSON format                          | `sprintf("%j", {"a": 1})`                 | `{"a": 1}`           |
 
 ## Features
 
@@ -185,7 +185,7 @@ from pyprintf import config
 result = config() \
     .allow_computed_value(True) \
     .preserve_unmatched_placeholder(True) \
-    .sprintf("My name is %s and I have %d %s. Today is %s", "John", 5, lambda: 'apple')
+    .sprintf("My name is %s and I have %d %s. Today is %s", "John", 5, lambda: "apple")
 print(result)  # Output: My name is John and I have 5 apple. Today is %s
 ```
 
@@ -197,7 +197,7 @@ Alternatively, you can pass a JavaScript object containing your desired configur
 sprintf_config = config(
     allow_computed_value=True,
     preserve_unmatched_placeholder=True
-).sprintf("My name is %s and I have %d %s. Today is %s", "John", 5, lambda: 'apple')
+).sprintf("My name is %s and I have %d %s. Today is %s", "John", 5, lambda: "apple")
 print(sprintf_config)  # Output: My name is John and I have 5 apple. Today is %s
 ```
 
@@ -223,13 +223,13 @@ A new `getStats()` method, accessible through the chainable configuration, allow
 
 ```python
 cfg = config()
-cfg.sprintf('%s %s %s %s %(name)s %1$s %2$s')
+cfg.sprintf("%s %s %s %s %(name)s %1$s %2$s")
 print(cfg.get_stats())
 # Output: {
-#   'total_placeholders': 7,
-#   'total_named_placeholder': 1,
-#   'total_positional_placeholder': 2,
-#   'total_sequential_positional_placeholder': 4
+#   "total_placeholders": 7,
+#   "total_named_placeholder": 1,
+#   "total_positional_placeholder": 2,
+#   "total_sequential_positional_placeholder": 4
 # }
 ```
 
@@ -240,7 +240,7 @@ You can specify the order of values in the formatted string independently from h
 __Example:__
 
 ```python
-sprintf('%2$s is %1$s years old and loves %3$s', 25, 'John', 'basketball')
+sprintf("%2$s is %1$s years old and loves %3$s", 25, "John", "basketball")
 // Returns: "John is 25 years old and loves basketball"
 ```
 
@@ -255,8 +255,8 @@ Instead of using numbers, you can reference values by their names using objects.
 __Example:__
 
 ```python
-user_obj = {'name': 'John'}
-print(sprintf('Hello %(name)s', user_obj))  # Output: Hello John
+user_obj = {"name": "John"}
+print(sprintf("Hello %(name)s", user_obj))  # Output: Hello John
 ```
 
 * Nested data (dictionaries/lists):
@@ -265,12 +265,12 @@ __Example:__
 
 ```python
 data = {
-    'users': [
-        {'name': 'Jane'},
-        {'name': 'Jack'}
+    "users": [
+        {"name": "Jane"},
+        {"name": "Jack"}
     ]
 }
-print(sprintf('Hello %s, %(users[0].name)s, and %(users[1].name)s', 'John', data))
+print(sprintf("Hello %s, %(users[0].name)s, and %(users[1].name)s", "John", data))
 # Output: Hello John, Jane, and Jack
 ```
 
@@ -283,8 +283,8 @@ print(sprintf('Hello %s, %(users[0].name)s, and %(users[1].name)s', 'John', data
 __Example:__
 
 ```python
-data = {'name': 'Polly'}
-print(sprintf('%(name)s %2$s a %1$s', 'cracker', 'wants', data))
+data = {"name": "Polly"}
+print(sprintf("%(name)s %2$s a %1$s", "cracker", "wants", data))
 # Output: Polly wants a cracker
 ```
 
@@ -294,10 +294,10 @@ You can use the `preserveUnmatchedPlaceholder` option to perform multi-stage str
 
 ```python
 cfg = config(preserve_unmatched_placeholder=True)
-first_pass = cfg.sprintf('My name is %(firstname)s %(lastname)s', {'lastname': 'Doe'})
+first_pass = cfg.sprintf("My name is %(firstname)s %(lastname)s", {"lastname": "Doe"})
 print(first_pass)  # Output: My name is %(firstname)s Doe
 
-print(cfg.sprintf(first_pass, {'firstname': 'John'}))  # Output: My name is John Doe
+print(cfg.sprintf(first_pass, {"firstname": "John"}))  # Output: My name is John Doe
 ```
 
 ### Computed values
@@ -320,12 +320,12 @@ from pyprintf import config
 # WARNING: Enabling computed values with untrusted input is risky!
 cfg = config().allow_computed_value(True)
 
-user_input = '%s'  # Could be controlled by a malicious user
+user_input = "%s"  # Could be controlled by a malicious user
 
 malicious_function = lambda: (
     # In a real attack, this could execute harmful code
     print("Malicious function executed!") or 
-    'dangerous output'
+    "dangerous output"
 )
 
 formatted = cfg.sprintf(user_input, malicious_function)
