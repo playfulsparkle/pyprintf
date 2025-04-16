@@ -9,4 +9,4 @@ Exposes core functionality at the package level and defines version information.
 from .core import sprintf, vsprintf, config
 
 __all__ = ["sprintf", "vsprintf", "config"]
-__version__ = "0.0.2"
+__version__ = "0.0.3"

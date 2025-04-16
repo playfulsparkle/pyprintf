@@ -6,13 +6,30 @@
 
 A **lightweight** and **open-source Python package** providing a robust **sprintf implementation** for **type-safe string formatting**. This library offers a familiar syntax for developers accustomed to `sprintf` from C and PHP, with enhanced Pythonic features including:
 
-- **Positional & Named Placeholders**  
-- **Cross-version Compatibility** (Python 3.10+)  
-- **Strict Type Validation**  
-- **JSON Serialization Support**  
+- **Positional & Named Placeholders**
+- **Cross-version Compatibility** (Python 3.11+)
+- **Strict Type Validation**
+- **JSON Serialization Support**
 - **Configurable Formatting Rules**
 
 ## Usage
+
+Here's a quick example to get you started:
+
+```python
+from pyprintf import sprintf
+
+name = "World"
+count = 42
+
+# Simple positional formatting
+greeting = sprintf("Hello %s!", name)
+print(greeting)  # Output: Hello World!
+
+# Formatting with a number
+message = sprintf("The answer is %d.", count)
+print(message)  # Output: The answer is 42.
+```
 
 ## Installation
 
@@ -73,7 +90,7 @@ def vsprintf(format_str: str, argv: Iterable[Any]) -> str
 
 ### Difference between `sprintf` and `vsprintf`
 
-The main difference is how they receive the values to be formatted: `sprintf` takes them as individual arguments after the format string, while `vsprintf` takes them as a single array argument. `vsprintf` is useful when the arguments are already in an array.
+The main difference is how they receive the values to be formatted: `sprintf` takes them as individual arguments after the format string, while `vsprintf` takes them as a single iterable (like a list or tuple) argument. `vsprintf` is useful when the arguments are already collected in a data structure.
 
 ## Format String Placeholders
 
@@ -242,7 +259,7 @@ user_obj = {'name': 'John'}
 print(sprintf('Hello %(name)s', user_obj))  # Output: Hello John
 ```
 
-* Nested data (arrays/objects):
+* Nested data (dictionaries/lists):
 
 __Example:__
 
