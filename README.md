@@ -159,7 +159,7 @@ This single character at the end of the placeholder determines how the correspon
 | `o`       | Integer in octal format                                      | `sprintf("%o", 10)`                       | `12`                 |
 | `s`       | String output                                                | `sprintf("%s", "hello")`                  | `hello`              |
 | `t`       | Boolean (`"True"`/`"False"` capitalized strings)             | `sprintf("%t", True)`                     | `True`               |
-| `T`       | Python type name (`"List"`/`"NoneType"` capitalized strings) | `sprintf("%T", [])`                       | `List`               |
+| `T`       | Python type name (`"list"`/`"NoneType"` capitalized strings) | `sprintf("%T", [])`                       | `list`               |
 | `u`       | Unsigned decimal integer (32-bit wrap)                       | `sprintf("%u", -5)`                       | `4294967291`         |
 | `x`       | Integer in lowercase hexadecimal                             | `sprintf("%x", 255)`                      | `ff`                 |
 | `X`       | Integer in uppercase hexadecimal                             | `sprintf("%X", 255)`                      | `FF`                 |
