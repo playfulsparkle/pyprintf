@@ -146,24 +146,24 @@ These elements can appear in a placeholder in a specific order between the `%` a
 
 This single character at the end of the placeholder determines how the corresponding argument will be interpreted and formatted.
 
-| Specifier | Description                                           | Python Example                            | Output               |
-| --------- | ----------------------------------------------------- | ----------------------------------------- | -------------------- |
-| `%%`      | Outputs a literal percent sign                        | `sprintf("%%")`                           | `%`                  |
-| `%b`      | Integer in binary format                              | `sprintf("%b", 10)`                       | `1010`               |
-| `%c`      | Integer as Unicode character                          | `sprintf("%c", 65)`                       | `A`                  |
-| `%d`/`%i` | Signed decimal integer                                | `sprintf("%d", 123)`                      | `123`                |
-| `%e`      | Floating point in scientific notation (lowercase "e") | `sprintf("%e", 123.45)`                   | `1.234500e+02`       |
-| `%u`      | Unsigned decimal integer (32-bit wrap)                | `sprintf("%u", -5)`                       | `4294967291`         |
-| `%f`      | Floating point with decimal precision                 | `sprintf("%.2f", 3.14159)`                | `3.14`               |
-| `%g`      | Adaptive float formatting                             | `sprintf("%.3g", 1234.56)`                | `1.23e+03`           |
-| `%o`      | Integer in octal format                               | `sprintf("%o", 10)`                       | `12`                 |
-| `%s`      | String output                                         | `sprintf("%s", "hello")`                  | `hello`              |
-| `%t`      | Boolean (`"true"`/`"false"` lowercase strings)        | `sprintf("%t", True)`                     | `true`               |
-| `%T`      | Python type name                                      | `sprintf("%T", [])`                       | `list`               |
-| `%v`      | Primitive value representation                        | `sprintf("%v", 5)`                        | `5`                  |
-| `%x`      | Integer in lowercase hexadecimal                      | `sprintf("%x", 255)`                      | `ff`                 |
-| `%X`      | Integer in uppercase hexadecimal                      | `sprintf("%X", 255)`                      | `FF`                 |
-| `%j`      | Python object in JSON format                          | `sprintf("%j", {"a": 1})`                 | `{"a": 1}`           |
+| Specifier | Description                                                  | Python Example                            | Output               |
+| --------- | ------------------------------------------------------------ | ----------------------------------------- | -------------------- |
+| `%%`      | Outputs a literal percent sign                               | `sprintf("%%")`                           | `%`                  |
+| `b`       | Integer in binary format                                     | `sprintf("%b", 10)`                       | `1010`               |
+| `c`       | Integer as Unicode character                                 | `sprintf("%c", 65)`                       | `A`                  |
+| `d`/`i`   | Signed decimal integer                                       | `sprintf("%d", 123)`                      | `123`                |
+| `e`       | Floating point in scientific notation (lowercase "e")        | `sprintf("%e", 123.45)`                   | `1.234500e+02`       |
+| `E`       | Floating point in scientific notation (uppercase "E")        | `sprintf("%E", 123.45)`                   | `1.234500E+02`       |
+| `f`       | Floating point with decimal precision                        | `sprintf("%.2f", 3.14159)`                | `3.14`               |
+| `g`       | Adaptive float formatting                                    | `sprintf("%.3g", 1234.56)`                | `1.23e+03`           |
+| `o`       | Integer in octal format                                      | `sprintf("%o", 10)`                       | `12`                 |
+| `s`       | String output                                                | `sprintf("%s", "hello")`                  | `hello`              |
+| `t`       | Boolean (`"True"`/`"False"` capitalized strings)             | `sprintf("%t", True)`                     | `True`               |
+| `T`       | Python type name (`"List"`/`"NoneType"` capitalized strings) | `sprintf("%T", [])`                       | `List`               |
+| `u`       | Unsigned decimal integer (32-bit wrap)                       | `sprintf("%u", -5)`                       | `4294967291`         |
+| `x`       | Integer in lowercase hexadecimal                             | `sprintf("%x", 255)`                      | `ff`                 |
+| `X`       | Integer in uppercase hexadecimal                             | `sprintf("%X", 255)`                      | `FF`                 |
+| `j`       | Python object in JSON format                                 | `sprintf("%j", {"a": 1})`                 | `{"a": 1}`           |
 
 ## Features
 

@@ -108,33 +108,33 @@ class TestSimplePlaceholders:
 
 class TestPlaceholderBoolean:
     def test_format_true_as_true(self):
-        assert sprintf("%t", True) == "true"
+        assert sprintf("%t", True) == "True"
 
     def test_format_true_as_t_with_precision_1(self):
-        assert sprintf("%.1t", True) == "t"
+        assert sprintf("%.1t", True) == "T"
 
     def test_format_the_string_true_as_true(self):
-        assert sprintf("%t", "True") == "true"
+        assert sprintf("%t", "True") == "True"
 
     def test_format_the_number_1_as_true(self):
-        assert sprintf("%t", 1) == "true"
+        assert sprintf("%t", 1) == "True"
 
     def test_format_false_as_false(self):
-        assert sprintf("%t", False) == "false"
+        assert sprintf("%t", False) == "False"
 
     def test_format_false_as_f_with_precision_1(self):
-        assert sprintf("%.1t", False) == "f"
+        assert sprintf("%.1t", False) == "F"
 
     def test_format_an_empty_string_as_false(self):
-        assert sprintf("%t", "") == "false"
+        assert sprintf("%t", "") == "False"
 
     def test_format_the_number_0_as_false(self):
-        assert sprintf("%t", "") == "false"
+        assert sprintf("%t", "") == "False"
 
 
 class TestPlaceholderType:
     def test_format_none_as_nonetype(self):
-        assert sprintf("%T", None) == "nonetype"
+        assert sprintf("%T", None) == "NoneType"
 
     def test_format_a_boolean_as_boolean(self):
         assert sprintf("%T", True) == "bool"

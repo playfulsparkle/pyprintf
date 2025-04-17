@@ -2,6 +2,12 @@
 
 All notable changes to the pyprintf project will be documented in this file.
 
+## [0.0.5] - 2025-04-17
+
+* Added support for uppercase `E` in scientific notation output for floating-point numbers through the `%E` format specifier (e.g., `1.234500E+02`), alongside the existing lowercase `e` format (`%e`).
+* Updated documentation to clarify that Python booleans are displayed as capitalized strings (`True`/`False`) when converted to strings.
+* Improved type name handling to properly respect Python's standard type name capitalization (e.g., `list`, `dict`, `NoneType`) when using `T` format (`%T`).
+
 ## [0.0.4] - 2025-04-16
 
 * Removed conflicting line in pyproject.toml - Programming Status :: Python :: 3.11

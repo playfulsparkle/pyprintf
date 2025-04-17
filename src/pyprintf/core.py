@@ -531,9 +531,9 @@ def sprintf_format(
             try:
                 arg = json.dumps(arg, indent=indent if not indent else None)
             except:
-                arg = "null"
+                arg = "None"
 
-        elif placeholder.type == "e":  # Exponential notation
+        elif placeholder.type in ("e", "E"):
             try:
                 if placeholder.precision:
                     try:
@@ -554,6 +554,8 @@ def sprintf_format(
                 else:
                     # Regular scientific notation with precision
                     arg = f"{float_val:.{precision}e}"
+
+                arg = arg.upper() if placeholder.type == "E" else arg
 
             except (ValueError, TypeError):
                 arg = "0.000000e+00"
@@ -630,17 +632,17 @@ def sprintf_format(
                 arg = arg[: int(placeholder.precision)]
 
         elif placeholder.type == "t":
-            arg = str(arg).lower()
+            arg = str(arg).capitalize()
             match arg:
                 case "0" | "":
-                    arg = "false"
+                    arg = "False"
                 case "1":
-                    arg = "true"
+                    arg = "True"
             if placeholder.precision:
                 arg = arg[: int(placeholder.precision)]
 
         elif placeholder.type == "T":
-            arg = type(arg).__name__.lower() if arg is not None else "nonetype"
+            arg = type(arg).__name__.lower() if arg is not None else "NoneType"
             if placeholder.precision:
                 arg = arg[: int(placeholder.precision)]
 
@@ -669,8 +671,8 @@ def sprintf_format(
                     if not hex_str:  # Handle zero case
                         hex_str = "0"
 
-                hex_str: str = hex_str.upper() if placeholder.type == "X" else hex_str
-                arg = hex_str
+                arg: str = hex_str.upper() if placeholder.type == "X" else hex_str
+
             except (ValueError, TypeError):
                 arg = "0"
 
