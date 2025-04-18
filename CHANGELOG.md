@@ -2,6 +2,10 @@
 
 All notable changes to the pyprintf project will be documented in this file.
 
+## [0.0.7] - 2025-04-18
+
+* Normalized scientific notation format (`e`, `E`) to align with C++ conventions.
+
 ## [0.0.6] - 2025-04-18
 
 * Resolved an issue where the `E` (exponential) format specifier was not recognized by the parser.
