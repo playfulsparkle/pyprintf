@@ -45,6 +45,9 @@ class TestSimplePlaceholders:
     def test_format_a_number_in_scientific_notation_lowercase(self):
         assert sprintf("%e", 2) == "2e+0"
 
+    def test_format_a_number_in_scientific_notation_uppercase(self):
+        assert sprintf("%E", 2) == "2E+0"
+
     def test_format_an_unsigned_decimal_integer(self):
         assert sprintf("%u", 2) == "2"
 
@@ -252,10 +255,10 @@ class TestPadding:
         assert sprintf("%f %s", -12.34, "xxx") == "-12.34 xxx"
 
     def test_format_a_json_object_with_indentation(self):
-        assert sprintf("%2j", {"foo": "bar"}) == json.dumps({"foo": "bar"})
+        assert sprintf("%2j", {"foo": "bar"}) == json.dumps({"foo": "bar"}, indent=2)
 
     def test_format_a_json_array_with_indentation(self):
-        assert sprintf("%2j", ["foo", "bar"]) == '["foo", "bar"]'
+        assert sprintf("%2j", ["foo", "bar"]) == '[\n  "foo",\n  "bar"\n]'
 
 
 class TestPrecision:
@@ -280,7 +283,9 @@ class TestLambda:
 
     def test_format_a_json_object_with_indentation_using_lambda(self):
         cfg = config().allow_computed_value(True)
-        assert cfg.sprintf("%2j", lambda: {"foo": "bar"}) == json.dumps({"foo": "bar"})
+        assert cfg.sprintf("%2j", lambda: {"foo": "bar"}) == json.dumps(
+            {"foo": "bar"}, indent=2
+        )
 
     def test_format_a_number_in_shortest_notation_lowercase_using_lambda(self):
         cfg = config().allow_computed_value(True)

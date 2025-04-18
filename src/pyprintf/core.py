@@ -22,9 +22,9 @@ RE: Dict[str, Pattern] = {
     # Matches if type is NOT 'T' (type detection)
     "not_type": re.compile(r"[^T]"),
     # Matches numeric format specifiers
-    "number": re.compile(r"[diefg]"),
+    "number": re.compile(r"[dieEfg]"),
     # Matches numeric argument types requiring number validation
-    "numeric_arg": re.compile(r"[bcdiefguxX]"),
+    "numeric_arg": re.compile(r"[bcdieEfguxX]"),
     # Matches JSON object specifier
     "json_object": re.compile(r"[j]"),
     # Matches plain text between format specifiers
@@ -48,7 +48,7 @@ RE: Dict[str, Pattern] = {
             \.            # Dot separator
             (\d*)         # Precision
         )?
-        ([b-gijostTuxX]) # Conversion type specifier
+        ([bcdieEfgjostTuxX]) # Conversion type specifier
         """,
         re.VERBOSE,
     ),
@@ -529,7 +529,7 @@ def sprintf_format(
         elif placeholder.type == "j":
             indent = int(placeholder.width) if placeholder.width else None
             try:
-                arg = json.dumps(arg, indent=indent if not indent else None)
+                arg = json.dumps(arg, indent=indent)
             except:
                 arg = "None"
 

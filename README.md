@@ -98,49 +98,84 @@ The `sprintf` function uses placeholders within the format string (the first arg
 
 ### Optional Formatting Elements
 
-These elements can appear in a placeholder in a specific order between the `%` and the type specifier.
+The `sprintf` function supports a wide range of formatting options. Each placeholder can include optional modifiers to control how the corresponding value is displayed. Below are the supported options in the order they can appear in a format specifier:
 
-1.  **Argument Index (Positional Specifier)**:
-    * **Syntax:** A number (starting from 1) followed by a `$` (e.g., `%2$s`).
-    * **Description:** Explicitly selects which argument to use for the current placeholder. If omitted, arguments are used sequentially in the order they are provided to `sprintf`.
-    * **Example:** `sprintf("%2$s, %1$s!", "Hello", "World")` will output `"World, Hello!"`.
+**Argument Index (Positional Specifier)**
 
-2.  **Sign Indicator**:
-    * **Syntax:** A `+` character (e.g., `%+d`).
-    * **Description:** Forces numeric values (integers and floats) to always display a sign, either `+` for positive numbers or `-` for negative numbers. By default, only negative numbers show a sign.
-    * **Example:** `sprintf("%+d", 5)` will output `"+5"`, and `sprintf("%+d", -5)` will output `"-5"`.
+* **Syntax:** `%<index>$<specifier>` (e.g., `%2$s`)
+* **Description:** Specifies which argument to insert at this position, starting from `1`. Useful when you want to change the order of values.
+* **Default:** If omitted, arguments are used in the order they appear.
+* **Example:**
 
-3.  **Padding Specifier**:
-    * **Syntax:** Either a `0` or a single quote `'` followed by any character (e.g., `%05d`, `%'*5s`).
-    * **Description:** Specifies the character used for padding the output to reach the desired width.
-        * Using `0` pads with leading zeros for numeric types.
-        * Using `'` followed by a character pads with that specific character.
-    * **Examples:**
-        * `sprintf("%05d", 12)` will output `"00012"`.
-        * `sprintf("%'*5s", "abc")` will output `"**abc"`.
+```python
+sprintf("%2$s, %1$s!", "Hello", "World") # will output "World, Hello!"
+```
 
-4.  **Alignment**:
-    * **Syntax:** A `-` character (e.g., `%-10s`).
-    * **Description:** Aligns the output to the left within the specified field width. If the `-` is omitted, the output is right-aligned by default.
-    * **Example:** `sprintf("%-10s", "hello")` will output `"hello     "`, and `sprintf("%10s", "hello")` will output `"     hello"`.
+**Sign Indicator**
 
-5.  **Width**:
-    * **Syntax:** A positive integer (e.g., `%10s`, `%5j`).
-    * **Description:** Specifies the minimum number of characters to output. If the value to be formatted is shorter than the width, it will be padded (using the padding character and alignment). For the `j` (JSON) type, this number defines the indentation level (number of spaces).
-    * **Examples:**
-        * `sprintf("%10s", "test")` will output `"      test"`.
-        * `sprintf("%5j", { a: 1 })` will output `"{\n     "a": 1\n}"`.
+* **Syntax:** `%+<specifier>` (e.g., `%+d`)
+* **Description:** Forces numeric output to always include a sign (`+` or `-`).
+* **Default:** Only negative numbers show a sign.
+* **Example:**
 
-6.  **Precision**:
-    * **Syntax:** A period `.` followed by a non-negative integer (e.g., `%.2f`, `%.5g`, `%.10s`).
-    * **Description:** Controls the precision of the output depending on the type specifier:
-        * For floating-point types (`e`, `f`): Specifies the number of digits to appear after the decimal point.
-        * For the `g` type: Specifies the number of significant digits.
-        * For the `s`, `t`, `T`, and `v` types: Specifies the maximum number of characters to output (truncates the string if it's longer).
-    * **Examples:**
-        * `sprintf("%.2f", 3.14159)` will output `"3.14"`.
-        * `sprintf("%.5g", 123.45678)` will output `"123.46"`.
-        * `sprintf("%.5s", "This is a long string")` will output `"This "`.
+```python
+sprintf("%+d", 5)  # will output "+5"
+sprintf("%+d", -5) # will output "-5"
+```
+
+**Padding Specifier**
+
+* Syntax: `%0<width><specifier>` or `%'<char><width><specifier>` (e.g., `%05d`, `%'*5s`)
+* Description: Defines the character used for padding.
+    * `0` pads numeric types with leading zeros.
+    * `'` followed by a character pads with that character.
+* Default padding is with spaces.
+* Examples:
+
+```python
+sprintf("%05d", 12)     # will output "00012"
+sprintf("%'*5s", "abc") # will output "**abc"
+```
+
+**Alignment**
+
+* **Syntax:** `%-<width><specifier>` (e.g., `%-10s`)
+* **Description:** Aligns the output within the field width.
+* `-` aligns left.
+* Default is right alignment.
+* **Example:**
+
+```python
+sprintf("%-10s", "hello") # will output "hello     "
+sprintf("%10s", "hello")  # will output "     hello"
+```
+
+**Width**
+
+* **Syntax:** `%<number><specifier>` (e.g., `%10s`, `%5j`)
+* **Description:** Sets the minimum width of the output. Pads if the actual output is shorter.
+    * For the `j` (JSON) specifier, this defines the number of spaces used for indentation.
+* **Examples:**
+
+```python
+sprintf("%10s", "test")  # will output "      test"
+sprintf("%5j", { a: 1 }) # will output "{\n     \"a\": 1\n}"
+```
+
+Precision
+
+**Syntax:** `%.<number><specifier>` (e.g., `%.2f`, `%.5g`, `%.10s`)
+**Description:** Controls output precision, depending on the type:
+* `f`, `e`: Number of digits after the decimal point.
+* `g`: Total significant digits.
+* `s`, `t`, `T`, `v`: Max characters (string is truncated).
+**Examples:**
+
+```python
+sprintf("%.2f", 3.14159)             # will output "3.14"
+sprintf("%.5g", 123.45678)           # will output "123.46"
+sprintf("%.5s", "This is long text") # will output "This "
+```
 
 ### Required Type Specifier
 

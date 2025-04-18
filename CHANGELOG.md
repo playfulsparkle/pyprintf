@@ -2,6 +2,10 @@
 
 All notable changes to the pyprintf project will be documented in this file.
 
+## [0.0.6] - 2025-04-18
+
+* Resolved an issue where the `E` (exponential) format specifier was not recognized by the parser.
+
 ## [0.0.5] - 2025-04-17
 
 * Added support for uppercase `E` in scientific notation output for floating-point numbers through the `%E` format specifier (e.g., `1.234500E+02`), alongside the existing lowercase `e` format (`%e`).
