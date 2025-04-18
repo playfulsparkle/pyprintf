@@ -19,10 +19,22 @@ class TestSimplePlaceholders:
         assert sprintf("%%") == "%"
 
     def test_format_a_binary_number(self):
-        assert sprintf("%b", 2) == "10"
+        assert sprintf("%b", 10) == "1010"
+
+    def test_format_a_binary_negative_number(self):
+        assert sprintf("%b", -5) == "11111111111111111111111111111011"
+
+    def test_format_a_binary_number_overflow(self):
+        assert sprintf("%b", 256) == "100000000"
 
     def test_format_a_character(self):
         assert sprintf("%c", 65) == "A"
+
+    def test_format_a_character_overflow(self):
+        assert sprintf("%c", 256) == "\x00"
+
+    def test_format_a_character_negative(self):
+        assert sprintf("%c", -1) == "ÿ"
 
     def test_format_a_decimal_integer(self):
         assert sprintf("%d", 2) == "2"
@@ -333,7 +345,7 @@ class TestLambda:
 
     def test_format_a_binary_number_using_lambda(self):
         cfg = config().allow_computed_value(True)
-        assert cfg.sprintf("%b", lambda: 2) == "10"
+        assert cfg.sprintf("%b", lambda: 10) == "1010"
 
     def test_format_a_character_using_lambda(self):
         cfg = config().allow_computed_value(True)

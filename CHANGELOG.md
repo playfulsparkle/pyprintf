@@ -2,6 +2,16 @@
 
 All notable changes to the pyprintf project will be documented in this file.
 
+## [0.0.8] - 2025-04-18
+
+**Character Handling (`%c`):**  
+* Added modulo 256 truncation to align with C's `unsigned char` behavior, ensuring values wrap within 0-255.  
+* Negative inputs now wrap via modulo 256 (e.g., `-1` becomes `255`).  
+
+**Binary Handling (`%b`):**  
+* Negative numbers now use 32-bit two's complement (e.g., `-5` becomes `11111111111111111111111111111011`).  
+* Values are truncated to 32 bits via `& 0xFFFFFFFF` to mimic C's integer overflow.  
+
 ## [0.0.7] - 2025-04-18
 
 * Normalized scientific notation format (`e`, `E`) to align with C++ conventions.

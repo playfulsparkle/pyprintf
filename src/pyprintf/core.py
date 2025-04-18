@@ -508,14 +508,20 @@ def sprintf_format(
         # Process argument based on format specifier
         if placeholder.type == "b":  # Binary
             try:
-                arg = bin(int(arg))[2:]  # Remove '0b' prefix
+                num = int(arg)
+                # Truncate to 32 bits (like C's `int`)
+                num = num & 0xFFFFFFFF
+                # Convert to two's complement for negatives
+                if num < 0:
+                    num += 0x100000000
+                arg = bin(num)[2:]
             except (ValueError, TypeError):
                 arg = "0"
 
         elif placeholder.type == "c":  # Character
             try:
-                arg = chr(int(arg))
-            except (ValueError, TypeError, OverflowError):
+                arg = chr(int(arg) % 256) # Wrap to 0-255 like C's unsigned char
+            except (ValueError, TypeError):
                 arg = "\0"
 
         elif placeholder.type in ("d", "i"):  # Integer
