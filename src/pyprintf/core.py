@@ -535,30 +535,39 @@ def sprintf_format(
 
         elif placeholder.type in ("e", "E"):
             try:
-                if placeholder.precision:
+                # Get precision (default to 6 if not specified)
+                if placeholder.precision is not None:
                     try:
-                        precision = (
-                            int(placeholder.precision) if placeholder.precision else 6
-                        )
+                        precision = int(placeholder.precision) if placeholder.precision else 6
                     except ValueError:
                         precision = 6
                 else:
                     precision = 6
-
+                    
                 # Format with scientific notation
                 float_val = float(arg)
-
-                # Special case for whole numbers - produce simpler output
-                if float_val == int(float_val):
-                    arg = f"{int(float_val)}e+0"
+                
+                # Always use full precision format (like C++)
+                mantissa_format = f"{{:.{precision}f}}"
+                mantissa = mantissa_format.format(float_val if abs(float_val) < 1 else float_val / (10 ** int(f"{float_val:e}".split('e')[1])))
+                
+                # Get exponent
+                if float_val == 0:
+                    exponent = "+00"
                 else:
-                    # Regular scientific notation with precision
-                    arg = f"{float_val:.{precision}e}"
-
-                arg = arg.upper() if placeholder.type == "E" else arg
-
+                    exponent_val = int(f"{float_val:e}".split('e')[1])
+                    exponent_sign = "+" if exponent_val >= 0 else "-"
+                    exponent = f"{exponent_sign}{abs(exponent_val):02d}"
+                
+                # Combine to match C++ format (always showing all decimal places)
+                arg = f"{mantissa}e{exponent}"
+                
+                # Handle uppercase for E format
+                if placeholder.type == "E":
+                    arg = arg.upper()
+                    
             except (ValueError, TypeError):
-                arg = "0.000000e+00"
+                arg = "0.000000e+00" if placeholder.type == "e" else "0.000000E+00"
 
         elif placeholder.type == "f":
             try:

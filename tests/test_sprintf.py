@@ -43,10 +43,10 @@ class TestSimplePlaceholders:
         assert sprintf("%j", ["foo", "bar"]) == json.dumps(["foo", "bar"])
 
     def test_format_a_number_in_scientific_notation_lowercase(self):
-        assert sprintf("%e", 2) == "2e+0"
+        assert sprintf("%e", 2) == "2.000000e+00"
 
     def test_format_a_number_in_scientific_notation_uppercase(self):
-        assert sprintf("%E", 2) == "2E+0"
+        assert sprintf("%E", 2) == "2.000000E+00"
 
     def test_format_an_unsigned_decimal_integer(self):
         assert sprintf("%u", 2) == "2"
