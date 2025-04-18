@@ -520,7 +520,7 @@ def sprintf_format(
 
         elif placeholder.type == "c":  # Character
             try:
-                arg = chr(int(arg) % 256) # Wrap to 0-255 like C's unsigned char
+                arg = chr(int(arg) % 256)  # Wrap to 0-255 like C's unsigned char
             except (ValueError, TypeError):
                 arg = "\0"
 
@@ -544,36 +544,43 @@ def sprintf_format(
                 # Get precision (default to 6 if not specified)
                 if placeholder.precision is not None:
                     try:
-                        precision = int(placeholder.precision) if placeholder.precision else 6
+                        precision = (
+                            int(placeholder.precision) if placeholder.precision else 6
+                        )
                     except ValueError:
                         precision = 6
                 else:
                     precision = 6
-                    
-                # Format with scientific notation
-                float_val = float(arg)
-                
-                # Always use full precision format (like C++)
-                mantissa_format = f"{{:.{precision}f}}"
-                mantissa = mantissa_format.format(float_val if abs(float_val) < 1 else float_val / (10 ** int(f"{float_val:e}".split('e')[1])))
-                
-                # Get exponent
-                if float_val == 0:
-                    exponent = "+00"
-                else:
-                    exponent_val = int(f"{float_val:e}".split('e')[1])
-                    exponent_sign = "+" if exponent_val >= 0 else "-"
-                    exponent = f"{exponent_sign}{abs(exponent_val):02d}"
-                
-                # Combine to match C++ format (always showing all decimal places)
+
+                # Use native scientific formatting
+                formatted = f"{float(arg):.{precision}e}"
+
+                parts = formatted.split("e")
+                mantissa = parts[0]
+                exponent = parts[1]
+
+                # Handle precision=0 (strip decimal point)
+                if precision == 0:
+                    mantissa = mantissa.split(".")[0]
+
+                # Format exponent to match C's +00/-00 style
+                exp_sign = exponent[0]
+
+                # Force 2 digits, no leading zeros
+                exp_digits = exponent[1:].lstrip("0").zfill(2)
+
+                if exp_digits == "":  # Edge case for exponent=0
+                    exp_digits = "00"
+
+                exponent = f"{exp_sign}{exp_digits}"
+
                 arg = f"{mantissa}e{exponent}"
-                
-                # Handle uppercase for E format
-                if placeholder.type == "E":
-                    arg = arg.upper()
-                    
+
             except (ValueError, TypeError):
-                arg = "0.000000e+00" if placeholder.type == "e" else "0.000000E+00"
+                arg = "0e+00" if precision == 0 else "0.000000e+00"
+
+            if placeholder.type == "E":
+                arg = arg.upper()
 
         elif placeholder.type == "f":
             try:
