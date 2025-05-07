@@ -1,0 +1,105 @@
+name: 🐞 Bug Report
+description: Create a report to help us improve the pyprintf Python library.
+title: "Bug Report Title"
+labels: []
+assignees:
+  - zsoltoroszlany82
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug! Please fill out the details below to help us understand and fix the issue.
+
+  - type: textarea
+    attributes:
+      label: Describe the Bug
+      description: A clear and concise description of what the bug is.
+      placeholder: e.g. The %u specifier gives an incorrect value for large negative numbers.
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Steps to Reproduce
+      description: List the steps to reproduce the behavior. **Include the exact format string, the arguments passed to `sprintf` or `vsprintf`, and any configuration used.**
+      placeholder: |
+        1. Use the following format string: "Your format string here, e.g., 'Hello %s! The value is %d'"
+        2. Use the following arguments: `"World", 123` (or `["World", 123]` for `vsprintf`)
+        3. If using custom configuration, describe it: `config().allow_computed_value(True)`
+        4. Run the following Python code:
+           ```python
+           from pyprintf import sprintf # or vsprintf, and config if needed
+
+           # Define your format string
+           format_string = "Paste the exact format string here"
+
+           # Define your arguments
+           args = ("Argument 1", 123) # or [arg1, arg2] for vsprintf, or {"key": value} for named
+
+           # If using config, define it here
+           # my_config = config().allow_computed_value(True)
+
+           # Call sprintf or vsprintf (adjust based on your usage)
+           output = sprintf(format_string, *args) # or vsprintf(format_string, args)
+
+           print(f"Format: {format_string}")
+           print(f"Arguments: {args}")
+           print(f"Output: {output}")
+           ```
+        5. Describe the resulting incorrect output.
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Expected Behavior
+      description: A clear and concise description of what you expected the output string to be for the given format string and arguments.
+      placeholder: For the format "Hello %s!" and argument "World", I expected the output "Hello World!".
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Error Logs or Messages
+      description: Paste any relevant traceback, error messages, or logs here.
+      placeholder: |
+        Traceback (most recent call last):
+          File "your_script.py", line X, in <module>
+            ...
+        ValueError: Unsupported format specifier 'z'
+    validations:
+      required: false
+
+  - type: textarea
+    attributes:
+      label: Screenshots or Video
+      description: If applicable, add screenshots or a video to help explain your problem (e.g., showing the console output).
+    validations:
+      required: false
+
+  - type: input
+    attributes:
+      label: Pyprintf Version
+      description: What version of pyprintf are you using?
+      placeholder: e.g. 1.0.0
+    validations:
+      required: true
+
+  - type: input
+    attributes:
+      label: Python Version
+      description: What version of Python are you using?
+      placeholder: e.g. 3.11, 3.12
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Environment Details
+      description: Operating System, and any other relevant environment details (e.g., how it was installed, virtual environment details, related libraries).
+      placeholder: |
+        - OS: macOS 14.4
+        - Installation method: pip
+        - Environment: venv
+    validations:
+      required: true
